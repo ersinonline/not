@@ -12,6 +12,7 @@
     <meta name="publisher" content="Ersin Çelik - Ersin Çelik">
     <meta name="copyright" content="Ersin Çelik - Ersin Çelik">
     <meta name="googlebot" content="noimageindex, notranslate">
+    <link rel="manifest" href="/manifest.json">
   
     <style>
 :root {
@@ -452,6 +453,19 @@ window.onload = function () {
     loadTheme();
     loadFormData();
 };
+
+        if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/service-worker.js").then(
+      (registration) => {
+        console.log("Service Worker kayıtlı:", registration);
+      },
+      (error) => {
+        console.log("Service Worker kaydedilemedi:", error);
+      }
+    );
+  });
+}
     </script>
 
   
