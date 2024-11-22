@@ -1,0 +1,21 @@
+{
+  "name": "İKÜ Hazırlık Not Hesaplama",
+  "short_name": "İKÜ Not Hesap",
+  "description": "İstanbul Kültür Üniversitesi hazırlık puanı hesaplama uygulaması.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffb700",
+  "icons": [
+    {
+      "src": "logo.ico",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "logo.ico",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
