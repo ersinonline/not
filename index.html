@@ -50,16 +50,20 @@ body {
     min-height: 100vh;
     flex-direction: column;
     transition: background-color 0.3s, color 0.3s;
+    box-sizing: border-box;
+    overflow-x: hidden; /* Yatay taşmayı engelle */
 }
 
 .container {
     width: 100%;
     max-width: 420px;
-    padding: 30px;
+    padding: 20px; /* Taşmayı önlemek için azaltıldı */
+    margin: 10px; /* Mobil cihazlarda sıkışmayı önler */
     background: var(--container-bg-color);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     transition: background-color 0.3s, box-shadow 0.3s;
+    box-sizing: border-box; /* Kutunun taşmasını engeller */
 }
 
 h1 {
@@ -79,7 +83,8 @@ label {
 }
 
 input, select {
-    width: 100%;
+    width: 100%; /* Tam genişlik */
+    max-width: 100%; /* Taşmayı engelle */
     padding: 12px;
     border: 1px solid var(--border-color);
     border-radius: 5px;
@@ -87,7 +92,7 @@ input, select {
     background-color: var(--input-bg-color);
     color: var(--text-color);
     margin-bottom: 15px;
-    box-sizing: border-box;
+    box-sizing: border-box; /* Giriş kutusunun taşmasını engeller */
     transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
 
@@ -186,7 +191,8 @@ footer a:hover {
 /* Mobil Cihazlar için Duyarlılık */
 @media (max-width: 768px) {
     .container {
-        padding: 20px;
+        padding: 15px;
+        margin: 5px; /* Daha iyi hizalama */
     }
 
     h1 {
@@ -206,7 +212,7 @@ footer a:hover {
 
 @media (max-width: 480px) {
     .container {
-        padding: 15px;
+        padding: 10px;
     }
 
     h1 {
@@ -228,7 +234,6 @@ footer a:hover {
         padding: 6px 10px;
     }
 }
-
     </style>
 </head>
 <body>
