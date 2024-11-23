@@ -1,3 +1,11 @@
+.visible-section {
+    display: block;
+}
+
+.hidden-section {
+    display: none;
+}
+
 :root {
     --background-color: #f9f9f9;
     --text-color: #333;
@@ -225,8 +233,8 @@ footer a:hover {
         font-size: 0.75rem; /* Yazı boyutunu küçülttük */
         padding: 5px 8px; /* Daha kompakt tasarım */
     }
-  
-          body {
+
+        body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
