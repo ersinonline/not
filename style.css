@@ -200,7 +200,6 @@ footer a:hover {
         font-size: 0.85rem;
         padding: 8px; /* Daha az padding */
     }
-}
 
 @media (max-width: 480px) {
     .container {
