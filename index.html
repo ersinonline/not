@@ -172,9 +172,9 @@ footer a:hover {
 
 .theme-toggle {
     width: auto;
-    margin: 15px auto 0;
-    padding: 8px 12px; /* Daha küçük padding */
-    font-size: 0.85rem; /* Yazı boyutunu küçülttük */
+    margin: 10px auto 0;  /* Yukarıdaki boşluğu küçültüyoruz */
+    padding: 5px 10px;  /* Daha küçük padding */
+    font-size: 0.75rem;  /* Yazı boyutunu küçültüyoruz */
     border: none;
     border-radius: 5px;
     background-color: var(--primary-color);
@@ -190,10 +190,11 @@ footer a:hover {
 }
 
 /* Mobil Cihazlar için Duyarlılık */
-@media (max-width: 768px) {
-    .container {
-        padding: 10px; /* Daha dar padding */
+@media (max-width: 480px) {
+    button {
+        padding: 10px;
     }
+}
 
     h1 {
         font-size: 1.4rem; /* Başlık boyutunu biraz küçülttük */
@@ -233,17 +234,66 @@ footer a:hover {
         font-size: 0.75rem; /* Yazı boyutunu küçülttük */
         padding: 5px 8px; /* Daha kompakt tasarım */
     }
+  
+          body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+        }
+
+        table {
+            width: 60%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+
+        th, td {
+            padding: 12px 20px;
+            text-align: left;
+            font-size: 16px;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        td {
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
 }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>İKÜ Not Hesaplama</h1>
+        <h1>İKÜ Hazırlık Yardımcım</h1>
         <form id="mainForm">
-            <label for="calculationType">Hesaplama Türü:</label>
+            <label for="calculationType">İşlem Türü:</label>
             <select id="calculationType" onchange="toggleCalculationType()" required>
                 <option value="kur">Kur Not Hesaplama</option>
                 <option value="proficiency">Hazırlık Geçme Hesaplama</option>
+                <option value="calendar">Sınav Takvimi</option>
             </select>
 
             <div id="kurCalculation" style="display: block;">
@@ -265,7 +315,6 @@ footer a:hover {
                 <input type="number" id="writing" min="0" max="20" placeholder="0-20">
                 <label for="participation">Katılım Notu (%10):</label>
                 <input type="number" id="participation" min="0" max="10" placeholder="0-10">
-                <button type="button" onclick="calculateKur()">Kur Notunu Hesapla</button>
             </div>
 
             <div id="proficiencyCalculation" style="display: none;">
@@ -279,9 +328,22 @@ footer a:hover {
                 <input type="number" id="b1PlusScore" min="70" max="100" placeholder="70-100">
                 <label for="b2Score">B2 Puanı (Opsiyonel):</label>
                 <input type="number" id="b2Score" min="70" max="100" placeholder="70-100">
-                <button type="button" onclick="calculateProficiency()">Hazırlık Notunu Hesapla</button>
             </div>
         </form>
+      
+      <div id="calendar" style="display: none;">
+      <br>           
+        Her kurun; 
+      <ul>
+          <li>4.haftası Mid Level Exam,</li>
+          <li>5.haftası Portfolio 1.Taslak,</li>
+          <li>6.haftası Portfolio 2.Taslak,</li>
+          <li>7.haftası Speaking,</li>
+          <li>8.haftası End of Level Exam</li>
+      </ul>
+        sınavları olacak.
+</div>
+
 
         <div class="result">
             <p>Toplam Not: <span id="totalGrade">-</span></p>
@@ -301,8 +363,19 @@ footer a:hover {
     <script>
 function toggleCalculationType() {
     const type = document.getElementById("calculationType").value;
+    
+    // Görünür yapma / gizleme işlemleri
     document.getElementById("kurCalculation").style.display = type === "kur" ? "block" : "none";
     document.getElementById("proficiencyCalculation").style.display = type === "proficiency" ? "block" : "none";
+    document.getElementById("calendar").style.display = type === "calendar" ? "block" : "none";  // Takvim görünür
+    
+    // Toplam not ve geçme mesajını sadece gerekli sayfalarda göster
+    if (type === "calendar") {
+        document.querySelector('.result').style.display = 'none';  // Toplam notu gizle
+    } else {
+        document.querySelector('.result').style.display = 'block';  // Toplam notu göster
+    }
+    
     saveFormData(); // Kullanıcı seçimleri her değiştiğinde kaydedilir
 }
 
@@ -386,21 +459,6 @@ function calculateProficiency() {
     const b2ScoreInput = document.getElementById("b2Score").value;
     const b2Score = b2ScoreInput !== "" ? parseFloat(b2ScoreInput) : null;
 
-    if (isNaN(a2Score) || isNaN(b1Score) || isNaN(b1PlusScore)) {
-        alert("Lütfen A2, B1 ve B1+ puanlarını doldurun.");
-        return;
-    }
-
-    if (b2Score !== null && (b2Score < 70 || b2Score > 100)) {
-        alert("B2 puanı 70 ile 100 arasında olmalıdır!");
-        return;
-    }
-
-    if (![a2Score, b1Score, b1PlusScore].every(score => score >= 70 && score <= 100)) {
-        alert("A2, B1 ve B1+ puanları 70 ile 100 arasında olmalıdır!");
-        return;
-    }
-
     const scores = [a2Score, b1Score, b1PlusScore];
     if (b2Score !== null) scores.push(b2Score);
 
@@ -466,6 +524,16 @@ window.onload = function () {
     );
   });
 }
+      
+// Hesaplama türü seçimi
+document.querySelectorAll('#kurCalculation input, #kurCalculation select').forEach(input => {
+    input.addEventListener('input', calculateKur); // Giriş değiştikçe hesaplama
+});
+
+// Hazırlık kısmı için otomatik hesaplama
+document.querySelectorAll('#proficiencyCalculation input, #proficiencyCalculation select').forEach(input => {
+    input.addEventListener('input', calculateProficiency); // Giriş değiştikçe hesaplama
+});
     </script>
 
   
@@ -484,8 +552,6 @@ window.onload = function () {
     var infolinks_wsid = 0;
     </script>
     <script type="text/javascript" src="http://resources.infolinks.com/js/infolinks_main.js"></script>
-
-    <!-- Bidvertiser2096663 -->
     
 </body>
 </html>
