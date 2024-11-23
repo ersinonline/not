@@ -66,6 +66,14 @@ body {
     transition: background-color 0.3s, box-shadow 0.3s;
     box-sizing: border-box;
 }
+      
+      /* Bağlantılar için stil */
+a {
+    font-weight: bold;      /* Bağlantıları kalın yapar */
+    color: inherit;         /* Rengini, metnin rengini alacak şekilde ayarlar */
+    text-decoration: none;  /* Altını çizmeyi kaldırır */
+}
+
 
 h1 {
     text-align: center;
@@ -289,11 +297,12 @@ footer a:hover {
     <div class="container">
         <h1>İKÜ Hazırlık Yardımcım</h1>
         <form id="mainForm">
-            <label for="calculationType">İşlem Türü:</label>
+            <label for="calculationType">Nasıl yardımcı olabilirim?</label>
             <select id="calculationType" onchange="toggleCalculationType()" required>
-                <option value="kur">Kur Not Hesaplama</option>
-                <option value="proficiency">Hazırlık Geçme Hesaplama</option>
-                <option value="calendar">Sınav Takvimi</option>
+                <option value="kur">Kur notumu hesaplayacağım.</option>
+                <option value="proficiency">Hazırlık puanımı hesaplayacağım.</option>
+                <option value="calendar">Sınav takvimine bakacağım.</option>
+                <option value="support">Yardım almak istiyorum.</option>
             </select>
 
             <div id="kurCalculation" style="display: block;">
@@ -332,21 +341,28 @@ footer a:hover {
         </form>
       
       <div id="calendar" style="display: none;">
-      <br>           
-        Her kurun; 
-      <ul>
-          <li>4.haftası Mid Level Exam,</li>
-          <li>5.haftası Portfolio 1.Taslak,</li>
-          <li>6.haftası Portfolio 2.Taslak,</li>
-          <li>7.haftası Speaking,</li>
-          <li>8.haftası End of Level Exam</li>
-      </ul>
-        sınavları olacak.
-</div>
+        <br>           
+          Her kurun; 
+        <ul>
+            <li>4.haftası Mid Level Exam,</li>
+            <li>5.haftası Portfolio 1.Taslak,</li>
+            <li>6.haftası Portfolio 2.Taslak,</li>
+            <li>7.haftası Speaking,</li>
+            <li>8.haftası End of Level Exam</li>
+        </ul>
+          sınavları olacak.
+      </div>
 
-
+      <div id="support" style="display: none;">
+        <br>           
+            <p>Macmillan için <a href="wa.me/908506110303">buradan</a> mesaj atabilirsin.</p>
+            <p>Wext için <a href="mailto:info@academyils.com">buradan</a> mail atabilirsin.</p>
+            <p>Diğer soruların için <a href="mailto:ydb@iku.edu.tr">buradan</a> mail atabilirsin.</p>
+            <p>Bu sayfa soruların için <a href="mailto:2400006588@stu.iku.edu.tr">buradan</a> mail atabilirsin.</p>
+      </div>
+      
         <div class="result">
-            <p>Toplam Not: <span id="totalGrade">-</span></p>
+            <p>Toplam Notun: <span id="totalGrade">-</span></p>
             <p id="passFailMessage"></p>
         </div>
 
@@ -360,7 +376,7 @@ footer a:hover {
         </p>
     </footer>
 
-    <script>
+    <script>   
 function toggleCalculationType() {
     const type = document.getElementById("calculationType").value;
     
@@ -368,14 +384,15 @@ function toggleCalculationType() {
     document.getElementById("kurCalculation").style.display = type === "kur" ? "block" : "none";
     document.getElementById("proficiencyCalculation").style.display = type === "proficiency" ? "block" : "none";
     document.getElementById("calendar").style.display = type === "calendar" ? "block" : "none";  // Takvim görünür
+    document.getElementById("support").style.display = type === "support" ? "block" : "none";  // Support görünür
     
     // Toplam not ve geçme mesajını sadece gerekli sayfalarda göster
-    if (type === "calendar") {
+    if (type === "calendar" || type === "support") {
         document.querySelector('.result').style.display = 'none';  // Toplam notu gizle
     } else {
         document.querySelector('.result').style.display = 'block';  // Toplam notu göster
     }
-    
+
     saveFormData(); // Kullanıcı seçimleri her değiştiğinde kaydedilir
 }
 
