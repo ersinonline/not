@@ -5,18 +5,294 @@
     <meta name="description" content="İstanbul Kültür Üniversitesi hazırlık puanı hesaplamak için kullanılır.">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="/not/logo.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" sizes="180x180" href="/logo.ico">
+    <link rel="shortcut icon" href="/logo.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <meta name="robots" content="index, follow">
     <meta name="author" content="Ersin Çelik">
     <meta name="publisher" content="Ersin Çelik - Ersin Çelik">
     <meta name="copyright" content="Ersin Çelik - Ersin Çelik">
     <meta name="googlebot" content="noimageindex, notranslate">
-    <link rel="manifest" href="/not/manifest.json">
-    <link rel="stylesheet" href="/not/style.css">
-</head>
+    <link rel="manifest" href="/manifest.json">
+  
+    <style>
+:root {
+    --background-color: #f9f9f9;
+    --text-color: #333;
+    --container-bg-color: #ffffff;
+    --primary-color: #ffb700;
+    --input-bg-color: #f9f9f9;
+    --border-color: #ddd;
+    --pass-color: #4caf50;
+    --fail-color: #e53935;
+    --error-color: #e53935;
+}
 
+[data-theme="dark"] {
+    --background-color: #121212;
+    --text-color: #f9f9f9;
+    --container-bg-color: #1e1e1e;
+    --primary-color: #ffb700;
+    --input-bg-color: #333;
+    --border-color: #444;
+    --pass-color: #66bb6a;
+    --fail-color: #ef5350;
+    --error-color: #ef5350;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+    transition: background-color 0.3s, color 0.3s;
+    box-sizing: border-box;
+    overflow-x: hidden; /* Yatay taşmayı tamamen kapat */
+}
+
+.container {
+    width: 95%; /* Daha küçük ekranlarda tam oturması için */
+    max-width: 400px; /* Maksimum genişliği düşürdük */
+    padding: 15px; /* Daha kompakt hale getirdik */
+    margin: 10px auto; /* Mobil cihazlarda daha iyi hizalama */
+    background: var(--container-bg-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    box-sizing: border-box;
+}
+      
+      /* Bağlantılar için stil */
+a {
+    font-weight: bold;      /* Bağlantıları kalın yapar */
+    color: inherit;         /* Rengini, metnin rengini alacak şekilde ayarlar */
+    text-decoration: none;  /* Altını çizmeyi kaldırır */
+}
+
+
+h1 {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 1.5rem; /* Başlık boyutunu küçülttük */
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 8px;
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+    font-size: 0.85rem; /* Yazı boyutunu biraz küçülttük */
+}
+
+input, select {
+    width: 100%; /* Tam genişlik */
+    max-width: 100%; /* Taşmayı tamamen engelle */
+    padding: 10px; /* İç boşluğu azaltıldı */
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 0.9rem; /* Yazı boyutu küçültüldü */
+    background-color: var(--input-bg-color);
+    color: var(--text-color);
+    margin-bottom: 10px; /* Daha kompakt aralık */
+    box-sizing: border-box; /* Giriş kutusunun taşmasını engeller */
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+input:focus, select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+button {
+    width: 100%; /* Tam genişlik */
+    padding: 10px; /* Daha küçük padding */
+    font-size: 1rem; /* Buton yazı boyutunu küçülttük */
+    font-weight: bold;
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #e6a500;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+.result {
+    text-align: center;
+    margin-top: 15px; /* Daha kompakt tasarım için azaltıldı */
+}
+
+.result span {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 15px; /* Daha küçük padding */
+    border-radius: 5px;
+    font-size: 1rem; /* Yazı boyutunu biraz küçülttük */
+}
+
+.pass {
+    background-color: var(--pass-color);
+    color: #fff;
+}
+
+.fail {
+    background-color: var(--fail-color);
+    color: #fff;
+}
+
+.error {
+    color: var(--error-color);
+    text-align: center;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+footer {
+    margin-top: 15px; /* Daha az boşluk */
+    text-align: center;
+    font-size: 0.85rem; /* Yazı boyutunu küçülttük */
+    color: var(--text-color);
+}
+
+footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+.theme-toggle {
+    width: auto;
+    margin: 10px auto 0;  /* Yukarıdaki boşluğu küçültüyoruz */
+    padding: 5px 10px;  /* Daha küçük padding */
+    font-size: 0.75rem;  /* Yazı boyutunu küçültüyoruz */
+    border: none;
+    border-radius: 5px;
+    background-color: var(--primary-color);
+    color: #fff;
+    cursor: pointer;
+    display: block;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background-color: #e6a500;
+}
+
+/* Mobil Cihazlar için Duyarlılık */
+@media (max-width: 480px) {
+    button {
+        padding: 10px;
+    }
+}
+
+    h1 {
+        font-size: 1.4rem; /* Başlık boyutunu biraz küçülttük */
+    }
+
+    button {
+        font-size: 0.95rem; /* Yazı boyutunu küçülttük */
+        padding: 8px; /* Daha kompakt */
+    }
+
+    input, select {
+        font-size: 0.85rem;
+        padding: 8px; /* Daha az padding */
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 8px; /* Daha küçük padding */
+    }
+
+    h1 {
+        font-size: 1.2rem; /* Küçük ekranlar için daha küçük başlık */
+    }
+
+    button {
+        font-size: 0.85rem;
+        padding: 6px; /* Daha az padding */
+    }
+
+    input, select {
+        font-size: 0.8rem;
+        padding: 6px; /* Giriş alanlarını daha kompakt hale getirdik */
+    }
+
+    .theme-toggle {
+        font-size: 0.75rem; /* Yazı boyutunu küçülttük */
+        padding: 5px 8px; /* Daha kompakt tasarım */
+    }
+  
+          body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+        }
+
+        table {
+            width: 60%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+
+        th, td {
+            padding: 12px 20px;
+            text-align: left;
+            font-size: 16px;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        td {
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+}
+    </style>
+</head>
 <body>
     <div class="container">
         <h1>İKÜ Hazırlık Yardımcım</h1>
@@ -29,10 +305,10 @@
                 <option value="support">Yardım almak istiyorum.</option>
             </select>
 
-            <div id="kurCalculation" class="visible">
+            <div id="kurCalculation" style="display: block;">
                 <label for="midLevel">Mid Level Exam Notu (%20):</label>
                 <input type="number" id="midLevel" min="0" max="100" placeholder="0-100">
-                <label for="endLevel">End of Level Exam Notu (%45):</label>
+                <label for="endLevel">End Level Exam Notu (%45):</label>
                 <input type="number" id="endLevel" min="0" max="100" placeholder="0-100">
                 <label for="wextHomework">WEXT Ödevi (%5):</label>
                 <select id="wextHomework">
@@ -50,7 +326,7 @@
                 <input type="number" id="participation" min="0" max="10" placeholder="0-10">
             </div>
 
-            <div id="proficiencyCalculation" class="hidden">
+            <div id="proficiencyCalculation" style="display: none;">
                 <label for="proficiencyExam">Proficiency Exam Puanı (%70):</label>
                 <input type="number" id="proficiencyExam" min="0" max="100" placeholder="0-100">
                 <label for="a2Score">A2 Puanı (%30):</label>
@@ -63,28 +339,28 @@
                 <input type="number" id="b2Score" min="70" max="100" placeholder="70-100">
             </div>
         </form>
-    
-        <div id="calendar" class="hidden">
-            <br>           
-                Her kurun; 
-            <ul>
-                <li>4.haftası Mid Level Exam,</li>
-                <li>5.haftası Portfolio 1.Taslak,</li>
-                <li>6.haftası Portfolio 2.Taslak,</li>
-                <li>7.haftası Speaking,</li>
-                <li>8.haftası End of Level Exam</li>
-            </ul>
-                sınavları olacak.
-        </div>
+      
+      <div id="calendar" style="display: none;">
+        <br>           
+          Her kurun; 
+        <ul>
+            <li>4.haftası Mid Level Exam,</li>
+            <li>5.haftası Portfolio 1.Taslak,</li>
+            <li>6.haftası Portfolio 2.Taslak,</li>
+            <li>7.haftası Speaking,</li>
+            <li>8.haftası End of Level Exam</li>
+        </ul>
+          sınavları olacak.
+      </div>
 
-        <div id="support" class="hidden">
-            <br>           
-                <p>Macmillan için <a href="https://wa.me/908506110303">buradan</a> mesaj atabilirsin.</p>
-                <p>Wext için <a href="mailto:info@academyils.com">buradan</a> mail atabilirsin.</p>
-                <p>Diğer soruların için <a href="mailto:ydb@iku.edu.tr">buradan</a> mail atabilirsin.</p>
-                <p>Bu sayfa soruların için <a href="mailto:2400006588@stu.iku.edu.tr">buradan</a> mail atabilirsin.</p>
-        </div>
-    
+      <div id="support" style="display: none;">
+        <br>           
+            <p>Macmillan için <a href="wa.me/908506110303">buradan</a> mesaj atabilirsin.</p>
+            <p>Wext için <a href="mailto:info@academyils.com">buradan</a> mail atabilirsin.</p>
+            <p>Diğer soruların için <a href="mailto:ydb@iku.edu.tr">buradan</a> mail atabilirsin.</p>
+            <p>Bu sayfa soruların için <a href="mailto:2400006588@stu.iku.edu.tr">buradan</a> mail atabilirsin.</p>
+      </div>
+      
         <div class="result">
             <p>Toplam Notun: <span id="totalGrade">-</span></p>
             <p id="passFailMessage"></p>
@@ -100,8 +376,199 @@
         </p>
     </footer>
 
-    <script src="/not/script.js"></script>
-    <script src="/not/analitik.js"></script>
+    <script>   
+function toggleCalculationType() {
+    const type = document.getElementById("calculationType").value;
+    
+    // Görünür yapma / gizleme işlemleri
+    document.getElementById("kurCalculation").style.display = type === "kur" ? "block" : "none";
+    document.getElementById("proficiencyCalculation").style.display = type === "proficiency" ? "block" : "none";
+    document.getElementById("calendar").style.display = type === "calendar" ? "block" : "none";  // Takvim görünür
+    document.getElementById("support").style.display = type === "support" ? "block" : "none";  // Support görünür
+    
+    // Toplam not ve geçme mesajını sadece gerekli sayfalarda göster
+    if (type === "calendar" || type === "support") {
+        document.querySelector('.result').style.display = 'none';  // Toplam notu gizle
+    } else {
+        document.querySelector('.result').style.display = 'block';  // Toplam notu göster
+    }
 
+    saveFormData(); // Kullanıcı seçimleri her değiştiğinde kaydedilir
+}
+
+function saveFormData() {
+    const formData = {
+        calculationType: document.getElementById("calculationType").value,
+        midLevel: document.getElementById("midLevel").value || "",
+        endLevel: document.getElementById("endLevel").value || "",
+        wextHomework: document.getElementById("wextHomework").value || "",
+        macmillanHomework: document.getElementById("macmillanHomework").value || "",
+        writing: document.getElementById("writing").value || "",
+        participation: document.getElementById("participation").value || "",
+        proficiencyExam: document.getElementById("proficiencyExam").value || "",
+        a2Score: document.getElementById("a2Score").value || "",
+        b1Score: document.getElementById("b1Score").value || "",
+        b1PlusScore: document.getElementById("b1PlusScore").value || "",
+        b2Score: document.getElementById("b2Score").value || "",
+    };
+    localStorage.setItem("formData", JSON.stringify(formData)); // JSON formatında kaydediliyor
+}
+
+function loadFormData() {
+    const savedData = JSON.parse(localStorage.getItem("formData")); // JSON formatında okuma
+    if (savedData) {
+        document.getElementById("calculationType").value = savedData.calculationType || "kur";
+        toggleCalculationType(); // Tür değişikliğine göre alanları göster/gizle
+        document.getElementById("midLevel").value = savedData.midLevel || "";
+        document.getElementById("endLevel").value = savedData.endLevel || "";
+        document.getElementById("wextHomework").value = savedData.wextHomework || "";
+        document.getElementById("macmillanHomework").value = savedData.macmillanHomework || "";
+        document.getElementById("writing").value = savedData.writing || "";
+        document.getElementById("participation").value = savedData.participation || "";
+        document.getElementById("proficiencyExam").value = savedData.proficiencyExam || "";
+        document.getElementById("a2Score").value = savedData.a2Score || "";
+        document.getElementById("b1Score").value = savedData.b1Score || "";
+        document.getElementById("b1PlusScore").value = savedData.b1PlusScore || "";
+        document.getElementById("b2Score").value = savedData.b2Score || "";
+    }
+}
+
+function calculateKur() {
+    saveFormData(); // Veriler hesaplamadan önce kaydedilir
+    const midLevel = parseFloat(document.getElementById("midLevel").value) || 0;
+    const endLevel = parseFloat(document.getElementById("endLevel").value) || null;
+    const wextHomework = parseFloat(document.getElementById("wextHomework").value) || 0;
+    const macmillanHomework = parseFloat(document.getElementById("macmillanHomework").value) || 0;
+    const writing = parseFloat(document.getElementById("writing").value) * 5 || 0;
+    const participation = parseFloat(document.getElementById("participation").value) || 0;
+
+    let totalGrade = midLevel * 0.2 + wextHomework + macmillanHomework + writing * 0.1 + participation;
+
+    if (endLevel === null) {
+        const requiredEndLevel = (70 - totalGrade) / 0.45;
+        document.getElementById("totalGrade").textContent = "-";
+        if (requiredEndLevel > 100) {
+            document.getElementById("passFailMessage").innerHTML =
+                '<span class="fail">Maalesef, bu kuru geçmeniz mümkün değil.</span>';
+        } else if (requiredEndLevel < 0) {
+            document.getElementById("passFailMessage").innerHTML =
+                '<span class="pass">Tebrikler, end level sınavına girmeden bu kuru geçebilirsiniz!</span>';
+        } else {
+            document.getElementById("passFailMessage").innerHTML =
+                `<span class="error">Bu kuru geçebilmek için End of Level sınavından en az ${requiredEndLevel.toFixed(2)} puan almanız gerekiyor.</span>`;
+        }
+    } else {
+        totalGrade += endLevel * 0.45;
+        document.getElementById("totalGrade").textContent = totalGrade.toFixed(2);
+        document.getElementById("passFailMessage").innerHTML =
+            totalGrade >= 70
+                ? '<span class="pass">Tebrikler, bu kuru geçtiniz!</span>'
+                : '<span class="fail">Maalesef, bu kuru geçemediniz.</span>';
+    }
+}
+
+function calculateProficiency() {
+    saveFormData(); // Hesaplamadan önce kaydedilir
+    const proficiencyExam = parseFloat(document.getElementById("proficiencyExam").value) || null;
+    const a2Score = parseFloat(document.getElementById("a2Score").value);
+    const b1Score = parseFloat(document.getElementById("b1Score").value);
+    const b1PlusScore = parseFloat(document.getElementById("b1PlusScore").value);
+    const b2ScoreInput = document.getElementById("b2Score").value;
+    const b2Score = b2ScoreInput !== "" ? parseFloat(b2ScoreInput) : null;
+
+    const scores = [a2Score, b1Score, b1PlusScore];
+    if (b2Score !== null) scores.push(b2Score);
+
+    const maxExamScore = scores.length * 100;
+    const totalScore = scores.reduce((sum, score) => sum + score, 0);
+    const scaledExamScore = (totalScore / maxExamScore) * 30;
+
+    if (proficiencyExam === null) {
+        const requiredProficiency = (60 - scaledExamScore) / 0.7;
+        document.getElementById("totalGrade").textContent = "-";
+        if (requiredProficiency > 100) {
+            document.getElementById("passFailMessage").innerHTML =
+                '<span class="fail">Maalesef, bu puanlarla hazırlık aşamasını geçmeniz mümkün değil.</span>';
+        } else if (requiredProficiency < 0) {
+            document.getElementById("passFailMessage").innerHTML =
+                '<span class="pass">Tebrikler, Proficiency Exam sonucu girmeden hazırlık aşamasını geçtiniz!</span>';
+        } else {
+            document.getElementById("passFailMessage").innerHTML =
+                `<span class="error">Bu aşamayı geçebilmek için Proficiency Exam'dan en az ${requiredProficiency.toFixed(2)} puan almanız gerekiyor.</span>`;
+        }
+    } else {
+        const scaledProficiencyScore = proficiencyExam * 0.7;
+        const finalScore = scaledExamScore + scaledProficiencyScore;
+
+        document.getElementById("totalGrade").textContent = finalScore.toFixed(2);
+        document.getElementById("passFailMessage").innerHTML =
+            finalScore >= 60
+                ? '<span class="pass">Tebrikler, hazırlık aşamasını geçtiniz!</span>'
+                : '<span class="fail">Maalesef, hazırlık aşamasını geçemediniz.</span>';
+    }
+}
+
+function toggleTheme() {
+    const currentTheme = document.body.getAttribute("data-theme");
+    const newTheme = currentTheme === "dark" ? "light" : "dark";
+    document.body.setAttribute("data-theme", newTheme);
+    localStorage.setItem("theme", newTheme);
+    document.querySelector(".theme-toggle").textContent =
+        newTheme === "dark" ? "☀️ Aydınlık Mod" : "🌙 Karanlık Mod";
+}
+
+function loadTheme() {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    document.body.setAttribute("data-theme", savedTheme);
+    document.querySelector(".theme-toggle").textContent =
+        savedTheme === "dark" ? "☀️ Aydınlık Mod" : "🌙 Karanlık Mod";
+}
+
+window.onload = function () {
+    loadTheme();
+    loadFormData();
+};
+
+        if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/service-worker.js").then(
+      (registration) => {
+        console.log("Service Worker kayıtlı:", registration);
+      },
+      (error) => {
+        console.log("Service Worker kaydedilemedi:", error);
+      }
+    );
+  });
+}
+      
+// Hesaplama türü seçimi
+document.querySelectorAll('#kurCalculation input, #kurCalculation select').forEach(input => {
+    input.addEventListener('input', calculateKur); // Giriş değiştikçe hesaplama
+});
+
+// Hazırlık kısmı için otomatik hesaplama
+document.querySelectorAll('#proficiencyCalculation input, #proficiencyCalculation select').forEach(input => {
+    input.addEventListener('input', calculateProficiency); // Giriş değiştikçe hesaplama
+});
+    </script>
+
+  
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4VN3R3LP42"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-4VN3R3LP42');
+</script>
+
+    <script type="text/javascript">
+    var infolinks_pid = 3429136;
+    var infolinks_wsid = 0;
+    </script>
+    <script type="text/javascript" src="http://resources.infolinks.com/js/infolinks_main.js"></script>
+    
 </body>
 </html>
