@@ -18,77 +18,29 @@
 </head>
 <body>
     <div class="container">
-        <h1>İKÜ Hazırlık Yardımcım</h1>
+        <!-- Dil Değiştirme Butonları -->
+        <div class="language-switcher">
+            <button id="changeToTR">Türkçe</button>
+            <button id="changeToEN">English</button>
+        </div>
+
+        <h1 data-lang="title">İKÜ Hazırlık Yardımcım</h1>
         <form id="mainForm">
-            <label for="calculationType">Nasıl yardımcı olabilirim?</label>
+            <label for="calculationType" data-lang="form_label">Nasıl yardımcı olabilirim?</label>
             <select id="calculationType" onchange="toggleCalculationType()" required>
-                <option value="kur">Kur notumu hesaplayacağım.</option>
-                <option value="proficiency">Hazırlık puanımı hesaplayacağım.</option>
-                <option value="calendar">Sınav takvimine bakacağım.</option>
-                <option value="support">Yardım almak istiyorum.</option>
+                <option value="kur" data-lang="option_kur">Kur notumu hesaplayacağım.</option>
+                <option value="proficiency" data-lang="option_proficiency">Hazırlık puanımı hesaplayacağım.</option>
+                <option value="calendar" data-lang="option_calendar">Sınav takvimine bakacağım.</option>
+                <option value="support" data-lang="option_support">Yardım almak istiyorum.</option>
             </select>
-
-            <div id="kurCalculation" class="visible-section">
-                <label for="midLevel">Mid Level Exam Notu (%20):</label>
-                <input type="number" id="midLevel" min="0" max="100" placeholder="0-100">
-                <label for="endLevel">End of Level Exam Notu (%45):</label>
-                <input type="number" id="endLevel" min="0" max="100" placeholder="0-100">
-                <label for="wextHomework">WEXT Ödevi (%5):</label>
-                <select id="wextHomework">
-                    <option value="5">Evet</option>
-                    <option value="0">Hayır</option>
-                </select>
-                <label for="macmillanHomework">Macmillan Ödevi (%10):</label>
-                <select id="macmillanHomework">
-                    <option value="10">Evet</option>
-                    <option value="0">Hayır</option>
-                </select>
-                <label for="writing">Writing Notu (%10):</label>
-                <input type="number" id="writing" min="0" max="20" placeholder="0-20">
-                <label for="participation">Katılım Notu (%10):</label>
-                <input type="number" id="participation" min="0" max="10" placeholder="0-10">
-            </div>
-
-            <div id="proficiencyCalculation" class="hidden-section">
-                <label for="proficiencyExam">Proficiency Exam Puanı (%70):</label>
-                <input type="number" id="proficiencyExam" min="0" max="100" placeholder="0-100">
-                <label for="a2Score">A2 Puanı (%30):</label>
-                <input type="number" id="a2Score" min="70" max="100" placeholder="70-100">
-                <label for="b1Score">B1 Puanı (%30):</label>
-                <input type="number" id="b1Score" min="70" max="100" placeholder="70-100">
-                <label for="b1PlusScore">B1+ Puanı (%30):</label>
-                <input type="number" id="b1PlusScore" min="70" max="100" placeholder="70-100">
-                <label for="b2Score">B2 Puanı (Opsiyonel):</label>
-                <input type="number" id="b2Score" min="70" max="100" placeholder="70-100">
-            </div>
         </form>
-        <div id="calendar" class="hidden-section">
-        <br>           
-            Her kurun; 
-        <ul>
-            <li>4.haftası Mid Level Exam,</li>
-            <li>5.haftası Portfolio 1.Taslak,</li>
-            <li>6.haftası Portfolio 2.Taslak,</li>
-            <li>7.haftası Speaking,</li>
-            <li>8.haftası End of Level Exam</li>
-        </ul>
-        sınavları olacak.
-    </div>
-
-    <div id="support" class="hidden-section">
-        <br>           
-            <p>Macmillan için <a href="wa.me/908506110303">buradan</a> mesaj atabilirsin.</p>
-            <p>Wext için <a href="mailto:info@academyils.com">buradan</a> mail atabilirsin.</p>
-            <p>Diğer soruların için <a href="mailto:ydb@iku.edu.tr">buradan</a> mail atabilirsin.</p>
-            <p>Bu sayfa soruların için <a href="mailto:2400006588@stu.iku.edu.tr">buradan</a> mail atabilirsin.</p>
-    </div>
 
         <div class="result">
-            <p>Toplam Notun: <span id="totalGrade">-</span></p>
+            <p data-lang="total_score">Toplam Notun: <span id="totalGrade">-</span></p>
             <p id="passFailMessage"></p>
         </div>
-    
-        <button class="theme-toggle" onclick="toggleTheme()">🌙 Karanlık Mod</button>
+
+        <button class="theme-toggle" onclick="toggleTheme()" data-lang="theme_toggle">🌙 Karanlık Mod</button>
     </div>
 
     <footer>
@@ -100,6 +52,6 @@
 
     <script src="/script.js"></script>
     <script src="/analitik.js"></script>
-    
+    <script src="/language.js"></script> <!-- Çoklu Dil Scripti -->
 </body>
 </html>
