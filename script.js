@@ -3,8 +3,8 @@ function toggleCalculationType() {
 
     document.getElementById("kurCalculation").style.display = type === "kur" ? "block" : "none";
     document.getElementById("proficiencyCalculation").style.display = type === "proficiency" ? "block" : "none";
-    document.getElementById("calendar").style.display = type === "calendar" ? "block" : "none";  // Takvim görünür
-    document.getElementById("support").style.display = type === "support" ? "block" : "none";  // Support görünür
+    document.getElementById("calendar").style.display = type === "calendar" ? "block" : "none";
+    document.getElementById("support").style.display = type === "support" ? "block" : "none";
 
     if (type === "calendar" || type === "support") {
         document.querySelector('.result').style.display = 'none'; 
@@ -12,7 +12,7 @@ function toggleCalculationType() {
         document.querySelector('.result').style.display = 'block';  
     }
 
-    saveFormData(); 
+    saveFormData();
 }
 
 function saveFormData() {
@@ -30,14 +30,14 @@ function saveFormData() {
         b1PlusScore: document.getElementById("b1PlusScore").value || "",
         b2Score: document.getElementById("b2Score").value || "",
     };
-    localStorage.setItem("formData", JSON.stringify(formData)); // JSON formatında kaydediliyor
+    localStorage.setItem("formData", JSON.stringify(formData));
 }
 
 function loadFormData() {
-    const savedData = JSON.parse(localStorage.getItem("formData")); // JSON formatında okuma
+    const savedData = JSON.parse(localStorage.getItem("formData"));
     if (savedData) {
         document.getElementById("calculationType").value = savedData.calculationType || "kur";
-        toggleCalculationType(); // Tür değişikliğine göre alanları göster/gizle
+        toggleCalculationType();
         document.getElementById("midLevel").value = savedData.midLevel || "";
         document.getElementById("endLevel").value = savedData.endLevel || "";
         document.getElementById("wextHomework").value = savedData.wextHomework || "";
@@ -53,22 +53,28 @@ function loadFormData() {
 }
 
 function calculateKur() {
-    saveFormData(); // Veriler hesaplamadan önce kaydedilir
+    saveFormData();
 
     const midLevel = parseFloat(document.getElementById("midLevel").value) || 0;
     const endLevel = parseFloat(document.getElementById("endLevel").value) || null;
 
-    // Macmillan ve WEXT hesaplama (100 üzerinden alınan değer oranlanıyor)
     const macmillanRaw = parseFloat(document.getElementById("macmillanHomework").value) || 0;
-    const macmillanHomework = (macmillanRaw / 100) * 10; // 10 üzerinden oranlama
+    const macmillanHomework = (macmillanRaw / 100) * 10;
 
     const wextRaw = parseFloat(document.getElementById("wextHomework").value) || 0;
-    const wextHomework = (wextRaw / 100) * 5; // 5 üzerinden oranlama
+    const wextHomework = (wextRaw / 100) * 5;
 
-    const writing = parseFloat(document.getElementById("writing").value) * 0.1 || 0; // 10 üzerinden
+    const writing = parseFloat(document.getElementById("writing").value) || 0;
+    const writingScore = (writing / 20) * 10;
+
     const participation = parseFloat(document.getElementById("participation").value) || 0;
 
-    let totalGrade = midLevel * 0.2 + wextHomework + macmillanHomework + writing + participation;
+    let totalGrade = midLevel * 0.2 + 
+                     (endLevel !== null ? endLevel * 0.45 : 0) +
+                     wextHomework + 
+                     macmillanHomework + 
+                     writingScore + 
+                     participation;
 
     if (endLevel === null) {
         const requiredEndLevel = (70 - totalGrade) / 0.45;
@@ -84,53 +90,11 @@ function calculateKur() {
                 `<span class="error">Bu kuru geçebilmek için End of Level sınavından en az ${requiredEndLevel.toFixed(2)} puan almanız gerekiyor.</span>`;
         }
     } else {
-        totalGrade += endLevel * 0.45;
         document.getElementById("totalGrade").textContent = totalGrade.toFixed(2);
         document.getElementById("passFailMessage").innerHTML =
             totalGrade >= 70
                 ? '<span class="pass">Tebrikler, bu kuru geçtiniz!</span>'
                 : '<span class="fail">Maalesef, bu kuru geçemediniz.</span>';
-    }
-}
-
-function calculateProficiency() {
-    saveFormData(); // Hesaplamadan önce kaydedilir
-    const proficiencyExam = parseFloat(document.getElementById("proficiencyExam").value) || null;
-    const a2Score = parseFloat(document.getElementById("a2Score").value);
-    const b1Score = parseFloat(document.getElementById("b1Score").value);
-    const b1PlusScore = parseFloat(document.getElementById("b1PlusScore").value);
-    const b2ScoreInput = document.getElementById("b2Score").value;
-    const b2Score = b2ScoreInput !== "" ? parseFloat(b2ScoreInput) : null;
-
-    const scores = [a2Score, b1Score, b1PlusScore];
-    if (b2Score !== null) scores.push(b2Score);
-
-    const maxExamScore = scores.length * 100;
-    const totalScore = scores.reduce((sum, score) => sum + score, 0);
-    const scaledExamScore = (totalScore / maxExamScore) * 30;
-
-    if (proficiencyExam === null) {
-        const requiredProficiency = (60 - scaledExamScore) / 0.7;
-        document.getElementById("totalGrade").textContent = "-";
-        if (requiredProficiency > 100) {
-            document.getElementById("passFailMessage").innerHTML =
-                '<span class="fail">Maalesef, bu puanlarla hazırlık aşamasını geçmeniz mümkün değil.</span>';
-        } else if (requiredProficiency < 0) {
-            document.getElementById("passFailMessage").innerHTML =
-                '<span class="pass">Tebrikler, Proficiency Exam sonucu girmeden hazırlık aşamasını geçtiniz!</span>';
-        } else {
-            document.getElementById("passFailMessage").innerHTML =
-                `<span class="error">Bu aşamayı geçebilmek için Proficiency Exam'dan en az ${requiredProficiency.toFixed(2)} puan almanız gerekiyor.</span>`;
-        }
-    } else {
-        const scaledProficiencyScore = proficiencyExam * 0.7;
-        const finalScore = scaledExamScore + scaledProficiencyScore;
-
-        document.getElementById("totalGrade").textContent = finalScore.toFixed(2);
-        document.getElementById("passFailMessage").innerHTML =
-            finalScore >= 60
-                ? '<span class="pass">Tebrikler, hazırlık aşamasını geçtiniz!</span>'
-                : '<span class="fail">Maalesef, hazırlık aşamasını geçemediniz.</span>';
     }
 }
 
@@ -169,10 +133,5 @@ if ("serviceWorker" in navigator) {
 }
 
 document.querySelectorAll('#kurCalculation input, #kurCalculation select').forEach(input => {
-    input.addEventListener('input', calculateKur); // Giriş değiştikçe hesaplama
-});
-
-// Hazırlık kısmı için otomatik hesaplama
-document.querySelectorAll('#proficiencyCalculation input, #proficiencyCalculation select').forEach(input => {
-    input.addEventListener('input', calculateProficiency); // Giriş değiştikçe hesaplama
+    input.addEventListener('input', calculateKur);
 });
