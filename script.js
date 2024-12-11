@@ -1,3 +1,4 @@
+// Hesaplama türüne göre ilgili bölümleri göster/gizle
 function toggleCalculationType() {
     const type = document.getElementById("calculationType").value;
 
@@ -12,9 +13,10 @@ function toggleCalculationType() {
         document.querySelector('.result').style.display = 'block';  
     }
 
-    saveFormData();
+    saveFormData(); 
 }
 
+// Form verilerini kaydetme
 function saveFormData() {
     const formData = {
         calculationType: document.getElementById("calculationType").value,
@@ -33,6 +35,7 @@ function saveFormData() {
     localStorage.setItem("formData", JSON.stringify(formData));
 }
 
+// Kaydedilen form verilerini yükleme
 function loadFormData() {
     const savedData = JSON.parse(localStorage.getItem("formData"));
     if (savedData) {
@@ -52,21 +55,18 @@ function loadFormData() {
     }
 }
 
+// Kur notu hesaplama
 function calculateKur() {
     saveFormData();
 
     const midLevel = parseFloat(document.getElementById("midLevel").value) || 0;
     const endLevel = parseFloat(document.getElementById("endLevel").value) || null;
-
-    const macmillanRaw = parseFloat(document.getElementById("macmillanHomework").value) || 0;
-    const macmillanHomework = (macmillanRaw / 100) * 10;
-
     const wextRaw = parseFloat(document.getElementById("wextHomework").value) || 0;
     const wextHomework = (wextRaw / 100) * 5;
-
+    const macmillanRaw = parseFloat(document.getElementById("macmillanHomework").value) || 0;
+    const macmillanHomework = (macmillanRaw / 100) * 10;
     const writing = parseFloat(document.getElementById("writing").value) || 0;
     const writingScore = (writing / 20) * 10;
-
     const participation = parseFloat(document.getElementById("participation").value) || 0;
 
     let totalGrade = midLevel * 0.2 + 
@@ -98,8 +98,10 @@ function calculateKur() {
     }
 }
 
+// Hazırlık notu hesaplama
 function calculateProficiency() {
-    saveFormData(); // Hesaplamadan önce kaydedilir
+    saveFormData();
+
     const proficiencyExam = parseFloat(document.getElementById("proficiencyExam").value) || null;
     const a2Score = parseFloat(document.getElementById("a2Score").value);
     const b1Score = parseFloat(document.getElementById("b1Score").value);
@@ -125,7 +127,7 @@ function calculateProficiency() {
                 '<span class="pass">Tebrikler, Proficiency Exam sonucu girmeden hazırlık aşamasını geçtiniz!</span>';
         } else {
             document.getElementById("passFailMessage").innerHTML =
-                <span class="error">Bu aşamayı geçebilmek için Proficiency Exam'dan en az ${requiredProficiency.toFixed(2)} puan almanız gerekiyor.</span>;
+                `<span class="error">Bu aşamayı geçebilmek için Proficiency Exam'dan en az ${requiredProficiency.toFixed(2)} puan almanız gerekiyor.</span>`;
         }
     } else {
         const scaledProficiencyScore = proficiencyExam * 0.7;
@@ -139,6 +141,7 @@ function calculateProficiency() {
     }
 }
 
+// Tema değiştirme
 function toggleTheme() {
     const currentTheme = document.body.getAttribute("data-theme");
     const newTheme = currentTheme === "dark" ? "light" : "dark";
@@ -148,6 +151,7 @@ function toggleTheme() {
         newTheme === "dark" ? "☀️ Aydınlık Mod" : "🌙 Karanlık Mod";
 }
 
+// Tema yükleme
 function loadTheme() {
     const savedTheme = localStorage.getItem("theme") || "light";
     document.body.setAttribute("data-theme", savedTheme);
@@ -155,6 +159,7 @@ function loadTheme() {
         savedTheme === "dark" ? "☀️ Aydınlık Mod" : "🌙 Karanlık Mod";
 }
 
+// Sayfa yüklendiğinde verileri ve temayı yükle
 window.onload = function () {
     loadTheme();
     loadFormData();
@@ -173,6 +178,12 @@ if ("serviceWorker" in navigator) {
     });
 }
 
+// Kur hesaplama için girişlere dinleyici ekle
 document.querySelectorAll('#kurCalculation input, #kurCalculation select').forEach(input => {
     input.addEventListener('input', calculateKur);
+});
+
+// Hazırlık kısmı için otomatik hesaplama
+document.querySelectorAll('#proficiencyCalculation input, #proficiencyCalculation select').forEach(input => {
+    input.addEventListener('input', calculateProficiency);
 });
