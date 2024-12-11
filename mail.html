@@ -109,12 +109,32 @@
         const chatBody = document.getElementById("chatBody");
         const userInput = document.getElementById("userInput");
 
-        const teacherEmails = {
-            "çelik": "celik@example.com",
-            "örnek": "ornek@example.com",
-            "yılmaz": "yilmaz@example.com",
-            "kara": "kara@example.com",
-        };
+        const teacherEmails = [
+            { name: "ayşe çamur", email: "a.camur@iku.edu.tr" },
+            { name: "sümeyye eyşan gizem aydoğdu", email: "s.aydogdu@iku.edu.tr" },
+            { name: "aleks matosoğlu", email: "a.matosoglu@iku.edu.tr" },
+            { name: "başak yağmur", email: "b.yagmur@iku.edu.tr" },
+            { name: "özgün melis soysal", email: "o.soysal@iku.edu.tr" },
+            { name: "ipek arıkan bakır", email: "i.bakir@iku.edu.tr" },
+            { name: "seren yıldız", email: "s.yildiz@iku.edu.tr" },
+            { name: "ceren erenler", email: "c.erenler@iku.edu.tr" },
+            { name: "saliha irenci", email: "s.irenci@iku.edu.tr" },
+            { name: "gülsüm çevikbaş", email: "g.cevikbas@iku.edu.tr" },
+            { name: "seda tuğçe akkaya", email: "s.eryilmaz@iku.edu.tr" },
+            { name: "seda kölük", email: "s.koluk@iku.edu.tr" },
+            { name: "özge çelik", email: "o.ciftci@iku.edu.tr" },
+            { name: "petek sunay", email: "p.sunay@iku.edu.tr" },
+            { name: "mustafa taner pektaş", email: "t.pektas@iku.edu.tr" },
+            { name: "gonca dayı", email: "g.yildirim@iku.edu.tr" },
+            { name: "asuman özyılmaz beşli", email: "a.besli@iku.edu.tr" },
+            { name: "ayşegül gezek", email: "a.pamuk@iku.edu.tr" },
+            { name: "hüseyin can", email: "h.can@iku.edu.tr" },
+            { name: "zeki toy", email: "z.toy@iku.edu.tr" },
+            { name: "özay şeker", email: "o.seker@iku.edu.tr" },
+            { name: "sinan bataklar", email: "s.bataklar@iku.edu.tr" },
+            { name: "ebru temiz", email: "e.erkacan@iku.edu.tr" },
+            { name: "seval sarıyıldız aksu", email: "s.sariyildiz@iku.edu.tr" },
+        ];
 
         function appendMessage(sender, text) {
             const messageDiv = document.createElement("div");
@@ -135,8 +155,13 @@
             userInput.value = "";
 
             setTimeout(() => {
-                if (teacherEmails[userMessage]) {
-                    appendMessage("bot", `Öğretmenin mail adresi: ${teacherEmails[userMessage]}`);
+                const matches = teacherEmails.filter(teacher =>
+                    teacher.name.toLowerCase().includes(userMessage.replace(/ı/g, "i"))
+                );
+
+                if (matches.length > 0) {
+                    const response = matches.map(match => `${match.name}: ${match.email}`).join("\n");
+                    appendMessage("bot", response);
                 } else {
                     appendMessage("bot", "Üzgünüm, bu öğretmenin mail adresini bulamadım.");
                 }
