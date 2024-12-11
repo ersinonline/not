@@ -1,11 +1,11 @@
 function toggleCalculationType() {
     const type = document.getElementById("calculationType").value;
-    
+
     document.getElementById("kurCalculation").style.display = type === "kur" ? "block" : "none";
     document.getElementById("proficiencyCalculation").style.display = type === "proficiency" ? "block" : "none";
     document.getElementById("calendar").style.display = type === "calendar" ? "block" : "none";  // Takvim görünür
     document.getElementById("support").style.display = type === "support" ? "block" : "none";  // Support görünür
-    
+
     if (type === "calendar" || type === "support") {
         document.querySelector('.result').style.display = 'none'; 
     } else {
@@ -54,14 +54,21 @@ function loadFormData() {
 
 function calculateKur() {
     saveFormData(); // Veriler hesaplamadan önce kaydedilir
+
     const midLevel = parseFloat(document.getElementById("midLevel").value) || 0;
     const endLevel = parseFloat(document.getElementById("endLevel").value) || null;
-    const wextHomework = parseFloat(document.getElementById("wextHomework").value) || 0;
-    const macmillanHomework = parseFloat(document.getElementById("macmillanHomework").value) || 0;
-    const writing = parseFloat(document.getElementById("writing").value) * 5 || 0;
+
+    // Macmillan ve WEXT hesaplama (100 üzerinden alınan değer oranlanıyor)
+    const macmillanRaw = parseFloat(document.getElementById("macmillanHomework").value) || 0;
+    const macmillanHomework = (macmillanRaw / 100) * 10; // 10 üzerinden oranlama
+
+    const wextRaw = parseFloat(document.getElementById("wextHomework").value) || 0;
+    const wextHomework = (wextRaw / 100) * 5; // 5 üzerinden oranlama
+
+    const writing = parseFloat(document.getElementById("writing").value) * 0.1 || 0; // 10 üzerinden
     const participation = parseFloat(document.getElementById("participation").value) || 0;
 
-    let totalGrade = midLevel * 0.2 + wextHomework + macmillanHomework + writing * 0.1 + participation;
+    let totalGrade = midLevel * 0.2 + wextHomework + macmillanHomework + writing + participation;
 
     if (endLevel === null) {
         const requiredEndLevel = (70 - totalGrade) / 0.45;
