@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mail Chatbot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .chat-container {
+            width: 90%;
+            max-width: 400px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-header {
+            background-color: #007BFF;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 1.2em;
+        }
+        .chat-body {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+        .chat-message {
+            margin-bottom: 15px;
+        }
+        .chat-message.user {
+            text-align: right;
+        }
+        .chat-message.user .message {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            display: inline-block;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 70%;
+        }
+        .chat-message.bot .message {
+            background-color: #f8f9fa;
+            color: #212529;
+            display: inline-block;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 70%;
+        }
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+            background-color: #f8f8f8;
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .chat-input button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .chat-input button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">Chatbot</div>
+        <div class="chat-body" id="chatBody">
+            <div class="chat-message bot">
+                <div class="message">Merhaba! Hangi öğretmenin mail adresini öğrenmek istersiniz?</div>
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="userInput" placeholder="Öğretmen ismi girin...">
+            <button onclick="handleUserInput()">Gönder</button>
+        </div>
+    </div>
+
+    <script>
+        const chatBody = document.getElementById("chatBody");
+        const userInput = document.getElementById("userInput");
+
+        const teacherEmails = {
+            "çelik": "celik@example.com",
+            "örnek": "ornek@example.com",
+            "yılmaz": "yilmaz@example.com",
+            "kara": "kara@example.com",
+        };
+
+        function appendMessage(sender, text) {
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add("chat-message", sender);
+            const messageContent = document.createElement("div");
+            messageContent.classList.add("message");
+            messageContent.textContent = text;
+            messageDiv.appendChild(messageContent);
+            chatBody.appendChild(messageDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function handleUserInput() {
+            const userMessage = userInput.value.trim().toLowerCase();
+            if (!userMessage) return;
+
+            appendMessage("user", userInput.value);
+            userInput.value = "";
+
+            setTimeout(() => {
+                if (teacherEmails[userMessage]) {
+                    appendMessage("bot", `Öğretmenin mail adresi: ${teacherEmails[userMessage]}`);
+                } else {
+                    appendMessage("bot", "Üzgünüm, bu öğretmenin mail adresini bulamadım.");
+                }
+            }, 500);
+        }
+    </script>
+</body>
+</html>
