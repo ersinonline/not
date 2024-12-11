@@ -5,9 +5,10 @@ function toggleCalculationType() {
     document.getElementById("kurCalculation").style.display = type === "kur" ? "block" : "none";
     document.getElementById("proficiencyCalculation").style.display = type === "proficiency" ? "block" : "none";
     document.getElementById("calendar").style.display = type === "calendar" ? "block" : "none";
+    document.getElementById("mail").style.display = type === "mail" ? "block" : "none"; // Mail bölümü ekleme
     document.getElementById("support").style.display = type === "support" ? "block" : "none";
 
-    if (type === "calendar" || type === "support") {
+    if (type === "calendar" || type === "support" || type === "mail") {
         document.querySelector('.result').style.display = 'none'; 
     } else {
         document.querySelector('.result').style.display = 'block';  
