@@ -98,6 +98,47 @@ function calculateKur() {
     }
 }
 
+function calculateProficiency() {
+    saveFormData(); // Hesaplamadan önce kaydedilir
+    const proficiencyExam = parseFloat(document.getElementById("proficiencyExam").value) || null;
+    const a2Score = parseFloat(document.getElementById("a2Score").value);
+    const b1Score = parseFloat(document.getElementById("b1Score").value);
+    const b1PlusScore = parseFloat(document.getElementById("b1PlusScore").value);
+    const b2ScoreInput = document.getElementById("b2Score").value;
+    const b2Score = b2ScoreInput !== "" ? parseFloat(b2ScoreInput) : null;
+
+    const scores = [a2Score, b1Score, b1PlusScore];
+    if (b2Score !== null) scores.push(b2Score);
+
+    const maxExamScore = scores.length * 100;
+    const totalScore = scores.reduce((sum, score) => sum + score, 0);
+    const scaledExamScore = (totalScore / maxExamScore) * 30;
+
+    if (proficiencyExam === null) {
+        const requiredProficiency = (60 - scaledExamScore) / 0.7;
+        document.getElementById("totalGrade").textContent = "-";
+        if (requiredProficiency > 100) {
+            document.getElementById("passFailMessage").innerHTML =
+                '<span class="fail">Maalesef, bu puanlarla hazırlık aşamasını geçmeniz mümkün değil.</span>';
+        } else if (requiredProficiency < 0) {
+            document.getElementById("passFailMessage").innerHTML =
+                '<span class="pass">Tebrikler, Proficiency Exam sonucu girmeden hazırlık aşamasını geçtiniz!</span>';
+        } else {
+            document.getElementById("passFailMessage").innerHTML =
+                <span class="error">Bu aşamayı geçebilmek için Proficiency Exam'dan en az ${requiredProficiency.toFixed(2)} puan almanız gerekiyor.</span>;
+        }
+    } else {
+        const scaledProficiencyScore = proficiencyExam * 0.7;
+        const finalScore = scaledExamScore + scaledProficiencyScore;
+
+        document.getElementById("totalGrade").textContent = finalScore.toFixed(2);
+        document.getElementById("passFailMessage").innerHTML =
+            finalScore >= 60
+                ? '<span class="pass">Tebrikler, hazırlık aşamasını geçtiniz!</span>'
+                : '<span class="fail">Maalesef, hazırlık aşamasını geçemediniz.</span>';
+    }
+}
+
 function toggleTheme() {
     const currentTheme = document.body.getAttribute("data-theme");
     const newTheme = currentTheme === "dark" ? "light" : "dark";
